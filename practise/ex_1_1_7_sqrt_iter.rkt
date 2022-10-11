@@ -19,4 +19,8 @@ iterate and improve our guesses.
 
 (define (sqrt x) (sqrt-iter 1.0 x))
 
+;test
 (sqrt 2)
+(sqrt 4)
+(sqrt 100)
+(sqrt 10000)
