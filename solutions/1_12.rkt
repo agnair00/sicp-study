@@ -1,13 +1,13 @@
 #lang sicp
 
-(define (pascal-triangle level index)
-  (cond ((> index level) 0)
-        ((or (= index 0) (= index level)) 1)
-        (else (+ (pascal-triangle (- level 1) (- index 1))
-                 (pascal-triangle (- level 1) index)))))
+(define (pascals-triangle row col)
+  (cond ((> col row) 0)
+        ((or (= col 1) (= row col)) 1)
+        (else (+ (pascals-triangle (- row 1) col)
+                 (pascals-triangle (- row 1) (- col 1))))))
 ;test
-(pascal-triangle 0 0) ;Expected 1
-(pascal-triangle 1 0) ;Expected 1
-(pascal-triangle 1 1) ;Expected 1
-(pascal-triangle 4 2) ;Expected 6
-(pascal-triangle 6 4) ;Expected 15
+(pascals-triangle 1 1) ;Expected 1
+(pascals-triangle 2 1) ;Expected 1
+(pascals-triangle 2 2) ;Expected 1
+(pascals-triangle 5 3) ;Expected 6
+(pascals-triangle 7 5) ;Expected 15
