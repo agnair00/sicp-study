@@ -1,21 +1,44 @@
 #lang sicp
 
-(define (product-recur term a next b)
+(define (product term a next b)
   (if (> a b)
       1
-      (* (term a) (product-recur term (next a) next b))))
-
-(define (identity x) x)
-(define (inc x) (+ 1 x))
+      (* (term a) (product term (next a) next b))))
 
 (define (factorial n)
-  (product-recur identity 1 inc n))
+  (define (identity x) x)
+  (define (inc x) (+ x 1))
+  (product identity 1 inc n))
 
-(factorial 5)
+(define (pi-by-4-approx n)
+  (define (inc x) (+ x 1))
 
-(define (even? x) (= (modulo x 2) 0))
+  (define (numer-term k)
+    (if (odd? k)
+      (+ 2 (* 2 (/ (- k 1) 2)))
+      (+ 2 k)))
 
-(define (approx-pi n-terms)
-  (define (next x)
-    (if (< x 1) (+ x 
-  (product <> 1 inc n-terms))
+  (define (denom-term k)
+    (if (odd? k)
+        (+ 3 (* 2 (/ (- k 1) 2)))
+        (+ 3 (* 2 (/ (- k 2) 2)))))
+  
+  (define (term k) (/ (numer-term k) (denom-term k)))
+
+  (product term 1 inc n))
+
+(define (product-iter term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (+ a 1) (* a result))))
+  (iter a 1))
+
+(define (factorial-iter n)
+  (define (identity x) x)
+  (define (inc x) (+ x 1))
+  (product-iter identity 1 inc n))
+
+(factorial 6)
+(* (pi-by-4-approx 200) 4.0)
+(factorial-iter 6)
