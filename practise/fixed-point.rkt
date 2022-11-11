@@ -22,5 +22,11 @@
 
 (define (average a b) (/ (+ a b) 2))
 
+(define (square x) (* x x))
+
+(define (cubert x)
+  (fixed-point (lambda (y) (average y (/ x (square y)))) 1.0))
+
 (fixed-point cos 1.0)
 (sqrt 25)
+(cubert 64)
