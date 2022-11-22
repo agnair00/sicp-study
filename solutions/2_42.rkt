@@ -46,7 +46,7 @@
 (define empty-board nil)
 
 (define (adjoin-position new-row k rest-of-queens)
-  (append rest-of-queens (list new-row)))
+  (cons new-row rest-of-queens))
 
 ;test
-(queens 10)
+(queens 4)
