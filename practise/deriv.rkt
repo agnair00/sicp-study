@@ -1,0 +1,52 @@
+#lang sicp
+
+(define (variable? x) (symbol? x))
+(define (same-variable? x y) (and (variable? x) (variable? y) (eq? x y)))
+
+(define (sum? x) (and (pair? x) (eq? (car x) '+)))
+(define (addend s) (cadr s))
+(define (augend s) (caddr s))
+(define (make-sum x y)
+  (cond ((=number? x 0) y)
+        ((=number? y 0) x)
+        ((and (number? x) (number? y)) (+ x y))
+        ((and (number? y) (zero? y)) x)
+        (else (list '+ x y))))
+
+(define (product? x) (and (pair? x) (eq? (car x) '*)))
+(define (multiplier p) (cadr p))
+(define (multiplicand p) (caddr p))
+(define (make-product x y) 
+  (cond ((and (number? x) (number? y)) (* x y))
+        ((=number? x 0) 0)
+        ((=number? y 0) 0)
+        ((=number? x 1) y)
+        ((=number? y 1) x)
+        (else (list '* x y))))
+
+(define (exponentiation? x) (and (pair? x) (eq? (car x) '**)))
+(define (base e) (cadr e))
+(define (exponent e) (caddr e))
+(define (make-exponentiation base exponent)
+  (cond ((and (=number? base 0) (=number? exponent 0)) (error "0 to power of 0 has no agreed upon value" base exponent))
+        ((and (number? base) (number? exponent)) (expt base exponent))
+        (else (list '** base exponent))))
+
+(define (=number? ex num)
+  (and (number? ex) (= ex num)))
+
+(define (deriv ex var)
+  (cond ((number? ex) 0) 
+        ((variable? ex) (if (same-variable? ex var) 1 0))
+        ((sum? ex) (make-sum (deriv (addend ex) var)
+                             (deriv (augend ex) var)))
+        ((product? ex) (make-sum (make-product (multiplier ex) (deriv (multiplicand ex) var))
+                                 (make-product (multiplicand ex) (deriv (multiplier ex) var))))
+        ((exponentiation? ex) (make-product (make-product (exponent ex)
+                                                          (make-exponentiation (base ex) (- (exponent ex) 1)))
+                                            (deriv (base ex) var)))
+        (else (error "Unknown expression type -- DERIV", ex))))
+
+;test
+(make-exponentiation 0 1)
+(deriv (make-product 4 (make-exponentiation 'x 5)) 'x)
