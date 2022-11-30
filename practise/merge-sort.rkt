@@ -16,11 +16,16 @@
         (else (iter n seq)))
   (iter (- (length seq) n) seq))
 
+;(define (add-in-order item seq)
+;  (cond ((and (null? (cdr seq)) (> item (car seq))) (list (car seq) item))
+;        ((null? seq) '())
+;        ((> item (car seq)) (cons (car seq) (add-in-order item (cdr seq))))
+;        (else (cons item seq))))
+
 (define (add-in-order item seq)
-  (cond ((and (null? (cdr seq)) (> item (car seq))) (list (car seq) item))
-        ((null? seq) '())
-        ((> item (car seq)) (cons (car seq) (add-in-order item (cdr seq))))
-        (else (cons item seq))))
+  (cond ((null? seq) (cons item '()))
+        ((< item (car seq)) (cons item seq))
+        (else (cons (car seq) (add-in-order item (cdr seq))))))
 
 (define (merge seq1 seq2)
   (cond ((null? seq1) seq2)
@@ -39,5 +44,5 @@
 
 ;test
 ;(#%require racket/trace)
-;(trace merge-sort merge)
-(merge-sort (list 1 5 9 7 2 8 6 3))
+;(trace merge-sort)
+(merge-sort (list 1 5 9 7 2 8 6 3 3 7 1 3 8 4 1 7 9 3 2))
